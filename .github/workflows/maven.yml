@@ -2,9 +2,9 @@ name: Create fixed Maven Central Index
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
   schedule:
     # * is a special character in YAML so you have to quote this string
     # added the daily cron in the middle of the night, avoiding midnight
