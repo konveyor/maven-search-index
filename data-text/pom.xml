@@ -13,6 +13,10 @@
 
     <name>Windup: Nexus Indexer - Data (Text Version)</name>
 
+    <properties>
+        <maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.jboss.windup.maven</groupId>
@@ -50,6 +54,7 @@
                                 <configuration>
                                     <descriptor>src/main/assembly/bundle-metadata.xml</descriptor>
                                     <appendAssemblyId>false</appendAssemblyId>
+                                    <finalName>nexus-indexer-data-text-${maven.build.timestamp}</finalName>
                                 </configuration>
                             </execution>
                         </executions>
