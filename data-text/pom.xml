@@ -42,44 +42,41 @@
             <build>
                 <plugins>
                     <plugin>
-                        <artifactId>maven-assembly-plugin</artifactId>
-                        <executions>
-                            <!-- Bundle the resulting indexes and text files to an artifact. -->
-                            <execution>
-                                <id>bundle-mappings</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>single</goal>
-                                </goals>
-                                <configuration>
-                                    <descriptor>src/main/assembly/bundle-metadata.xml</descriptor>
-                                    <appendAssemblyId>false</appendAssemblyId>
-                                    <finalName>nexus-indexer-data-text-${maven.build.timestamp}</finalName>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
                         <version>1.4.0</version>
                         <executions>
                             <!-- Generate the indexes. -->
+<!--                            <execution>-->
+<!--                                <id>central</id>-->
+<!--                                <phase>compile</phase>-->
+<!--                                <goals>-->
+<!--                                    <goal>java</goal>-->
+<!--                                </goals>-->
+<!--                                <configuration>-->
+<!--                                    <mainClass>org.jboss.windup.maven.nexusindexer.GenerateMetadataFile</mainClass>-->
+<!--                                    <cleanupDaemonThreads>false</cleanupDaemonThreads>-->
+<!--                                    <arguments>-->
+<!--                                        <argument>text</argument>-->
+<!--                                        <argument>central</argument>-->
+<!--                                        <argument>https://repo1.maven.org/maven2</argument>-->
+<!--                                        <argument>${project.build.directory}</argument>-->
+<!--                                        <argument>${user.home}/.windup/cache/nexus-indexes</argument>-->
+<!--                                    </arguments>-->
+<!--                                </configuration>-->
+<!--                            </execution>-->
                             <execution>
-                                <id>central</id>
+                                <id>generate-index-file</id>
                                 <phase>compile</phase>
                                 <goals>
                                     <goal>java</goal>
                                 </goals>
                                 <configuration>
-                                    <mainClass>org.jboss.windup.maven.nexusindexer.GenerateMetadataFile</mainClass>
+                                    <mainClass>org.jboss.windup.maven.nexusindexer.IndexBuilder</mainClass>
                                     <cleanupDaemonThreads>false</cleanupDaemonThreads>
                                     <arguments>
-                                        <argument>text</argument>
-                                        <argument>central</argument>
-                                        <argument>https://repo1.maven.org/maven2</argument>
-                                        <argument>${project.build.directory}</argument>
-                                        <argument>${user.home}/.windup/cache/nexus-indexes</argument>
+                                        <argument>${project.build.directory}/central.archive-metadata.txt</argument>
+                                        <argument>${project.build.directory}/central.archive-metadata.idx</argument>
                                     </arguments>
                                 </configuration>
                             </execution>

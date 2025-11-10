@@ -35,9 +35,15 @@ jobs:
         run: mvn -B install -f indexer/pom.xml
       - name: Create Nexus Index
         run: mvn -f data-text/pom.xml clean compile package -DskipTests
+      - name: Zip files
+        run: |
+          DATE=$(date +'%Y%m%d%H%M%S')
+          ZIP="maven-index-data-v${DATE}.zip"
+          zip -j "$ZIP" data-text/target/central.archive-metadata.txt data-text/target/central.archive-metadata.idx
+          echo "ZIP_FILE=$ZIP" >> $GITHUB_ENV
       - name: Archive Nexus Index
         uses: actions/upload-artifact@v4
         with:
-          name: nexus-maven-repository-index
-          path: data-text/target/nexus-indexer-data-text-*.zip
+          name: ${{ env.ZIP_FILE }}
+          path: ${{ env.ZIP_FILE }}
           retention-days: 3
