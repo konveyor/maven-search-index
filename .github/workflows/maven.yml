@@ -2,9 +2,9 @@ name: Create fixed Maven Central Index
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
   schedule:
     # * is a special character in YAML so you have to quote this string
     # added the daily cron in the middle of the night, avoiding midnight
@@ -14,8 +14,8 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
-
+    runs-on: oracle-vm-16cpu-64gb-x86-64
+    timeout-minutes: 720
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 8
@@ -34,10 +34,16 @@ jobs:
       - name: Build Nexus Indexer
         run: mvn -B install -f indexer/pom.xml
       - name: Create Nexus Index
-        run: mvn -f data-text/pom.xml install -DskipTests -P update-central-index
+        run: mvn -f data-text/pom.xml clean compile package -DskipTests
+      - name: Zip files
+        run: |
+          DATE=$(date +'%Y%m%d%H%M%S')
+          ZIP="maven-index-data-v${DATE}.zip"
+          zip -j "$ZIP" data-text/target/central.archive-metadata.txt data-text/target/central.archive-metadata.idx
+          echo "ZIP_FILE=$ZIP" >> $GITHUB_ENV
       - name: Archive Nexus Index
         uses: actions/upload-artifact@v4
         with:
-          name: nexus-maven-repository-index.gz
-          path: data-text/target/nexus-maven-repository-index.gz
+          name: ${{ env.ZIP_FILE }}
+          path: ${{ env.ZIP_FILE }}
           retention-days: 3
