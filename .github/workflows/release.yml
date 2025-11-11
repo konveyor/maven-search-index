@@ -60,7 +60,7 @@ jobs:
         echo "=== Generated files ==="
         find data-text/target -name "*.zip" -type f
         
-        ZIP_FILE=$(find data-text/target -name "nexus-indexer-data-text-*.zip" | head -1)
+        ZIP_FILE=$(find data-text/target -name "maven-index-data-*.zip" | head -1)
         if [ -z "$ZIP_FILE" ]; then
           echo "❌ No ZIP file found!"
           exit 1
