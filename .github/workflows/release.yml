@@ -51,7 +51,7 @@ jobs:
     - name: Zip files
       run: |
         DATE=$(date +'%Y%m%d%H%M%S')
-        ZIP="maven-index-data-v${DATE}.zip"
+        ZIP="data-text/target/maven-index-data-v${DATE}.zip"
         zip -j "$ZIP" data-text/target/central.archive-metadata.txt data-text/target/central.archive-metadata.idx
         echo "ZIP_FILE=$ZIP" >> $GITHUB_ENV
       
