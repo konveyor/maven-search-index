@@ -46,7 +46,14 @@ jobs:
     - name: Build Nexus Indexer
       run: mvn -B install -f indexer/pom.xml
     - name: Create Nexus Index with date version
-      run: mvn -f data-text/pom.xml install -DskipTests -Dmaven.build.timestamp=$BUILD_DATE
+      run: mvn -f data-text/pom.xml clean compile package -DskipTests
+
+    - name: Zip files
+      run: |
+        DATE=$(date +'%Y%m%d%H%M%S')
+        ZIP="maven-index-data-v${DATE}.zip"
+        zip -j "$ZIP" data-text/target/central.archive-metadata.txt data-text/target/central.archive-metadata.idx
+        echo "ZIP_FILE=$ZIP" >> $GITHUB_ENV
       
     - name: Verify generated files
       run: |
