@@ -4,6 +4,7 @@ This repository provides a way to build a fixed version of the `nexus-maven-repo
 
 ##  Requirements
 - Java 8 installed
+- Maven installed
 - 32GB RAM, ideally 64GB RAM
 - 10GB disk space
 
