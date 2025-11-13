@@ -1,26 +1,21 @@
 # Maven Central Index
 
-Since [OSSRH-60950](https://issues.sonatype.org/browse/OSSRH-60950), `nexus-repository-indexer` provides a way to build a fixed version of the `nexus-maven-repository-index.gz` Maven Central Index (ref. [Central Index](https://maven.apache.org/repository/central-index.html#central-index)) without `module` and `pom.512` files but with the right JAR files inside.  
-The `nexus-maven-repository-index.gz` Maven Central Index can either be downloaded from nightly build or built locally.  
-Check the next paragraphs for both the options.
+This repository provides a way to build a fixed version of the `nexus-maven-repository-index.gz` Maven Central Index (ref. [Central Index](https://maven.apache.org/repository/central-index.html#central-index)) without `module` and `pom.512` files but with the right JAR files inside.
 
-## Download fixed Maven Central Index  
+##  Requirements
+- Java 8 installed
+- Maven installed
+- 32GB RAM, ideally 64GB RAM
+- 10GB disk space
 
-There's a night build that creates ever day an update version of the `nexus-maven-repository-index.gz` Maven Central Index.  
-From the ["Create fixed Maven Central Index" runs list](https://github.com/windup/nexus-repository-indexer/actions?query=event%3Aschedule+is%3Asuccess+workflow%3A%22Create+fixed+Maven+Central+Index%22) select the latest run.  
-In the details page download the `nexus-maven-repository-index.gz` from the `Artifacts` section.
+## How to build
+1. Clone this repo: `git clone https://github.com/konveyor/maven-search-index.git`
+2. Move into the directory: `cd maven-search-index`
+3. Install parent pom: `mvn -B -N install -f pom.xml`
+4. Install indexer pom: `mvn -B install -f indexer/pom.xml`
+5. Generate index: `mvn -f data-text/pom.xml clean compile package -DskipTests`
+6. Move into the directory: `maven-search-index/data-text/target`
 
-## Create a fixed Maven Central Index  
-
-To build the index locally on your host, follow the following steps:
-
-1. clone this repo  
-`$ git clone https://github.com/windup/nexus-repository-indexer.git`
-1. move into the `nexus-repository-indexer` folder  
-`$ cd nexus-repository-indexer`
-1. install the parent POM  
-`$ mvn -N install`
-1. install the `indexer` module  
-`$ mvn -f indexer/pom.xml install`
-1. build the index  
-`$ mvn -f data-text/pom.xml package -DskipTests -P update-central-index`
+Two files will be generated in `data-text/target`:
+- The data file: `central.archive-metadata.txt`
+- The index file: `central.archive-metadata.idx`
